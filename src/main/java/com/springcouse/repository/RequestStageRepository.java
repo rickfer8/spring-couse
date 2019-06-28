@@ -10,7 +10,7 @@ import com.springcouse.domain.RequestStage;
 @Repository
 public interface RequestStageRepository extends JpaRepository<RequestStage, Long> {
 	
-	public List<RequestStage> findAllRequestId(Long id);
+	public List<RequestStage> findAllByRequestId(Long id);
 	
 	
 }
