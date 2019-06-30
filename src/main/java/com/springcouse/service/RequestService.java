@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springcouse.domain.Request;
-import com.springcouse.domain.User;
 import com.springcouse.domain.enuns.RequestState;
 import com.springcouse.repository.RequestRepository;
 
@@ -19,15 +18,14 @@ public class RequestService {
 	private RequestRepository requestRepository;
 	
 	public Request save(Request request) {
-
+		request.setCriationDate(new Date());
+		request.setState(RequestState.OPEN);
+		
 		Request createdRequest = requestRepository.save(request);
 		return createdRequest;
 	}
 	
-	public Request update(Request request) {
-		request.setCriationDate(new Date());
-		request.setState(RequestState.OPEN);
-		
+	public Request update(Request request) {	
 		Request updateRequest = requestRepository.save(request);
 		return updateRequest;
 	}
