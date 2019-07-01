@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springcouse.domain.Request;
 import com.springcouse.domain.User;
 import com.springcouse.dto.UserLoginDto;
+import com.springcouse.service.RequestService;
 import com.springcouse.service.UserService;
 
 @RestController
@@ -23,6 +25,9 @@ public class UserResource {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private RequestService requestService;
 	
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody User user){
@@ -43,7 +48,7 @@ public class UserResource {
 		return ResponseEntity.ok(user);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping
 	public ResponseEntity<List<User>> listAll(){
 		List<User> users = userService.listAll();
 		return ResponseEntity.ok(users);
@@ -53,6 +58,12 @@ public class UserResource {
 	public ResponseEntity<User> login(@RequestBody UserLoginDto user){
 		User loggedUser = userService.login(user.getEmail(), user.getPassword());
 		return ResponseEntity.ok(loggedUser);
+	}
+	
+	@GetMapping("/{id}/requests")
+	public ResponseEntity<List<Request>> listAllRequestById(@PathVariable(name = "id") Long id){
+		List<Request> requests = requestService.listAllByOwnerId(id);
+		return ResponseEntity.ok(requests);		
 	}
 
 }
