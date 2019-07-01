@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springcouse.domain.Request;
+import com.springcouse.domain.RequestStage;
 import com.springcouse.service.RequestService;
+import com.springcouse.service.RequestStageService;
 
 @RestController
 @RequestMapping(value = "requests")
@@ -23,11 +25,13 @@ public class RequestResource {
 	@Autowired
 	private RequestService requestService;
 	
+	@Autowired
+	private RequestStageService requestStageService;
+	
 	@PostMapping
 	public ResponseEntity<Request> save(@RequestBody Request request){
 		Request createdRequest = requestService.save(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
-		
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);		
 	}
 	
 	@PutMapping("/{id}")
@@ -47,6 +51,12 @@ public class RequestResource {
 	public ResponseEntity<List<Request>> listAll(){
 		List<Request> requests = requestService.listAll();
 		return ResponseEntity.ok(requests);
+	}
+	
+	@GetMapping("/{id}/request-stages")
+	public ResponseEntity<List<RequestStage>> listAllStageById(@PathVariable(name = "id") Long id){
+		List<RequestStage> stages = requestStageService.listAllByRequestId(id);
+		return ResponseEntity.ok(stages);
 	}
 
 }

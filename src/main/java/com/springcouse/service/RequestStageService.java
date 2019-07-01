@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springcouse.domain.Request;
 import com.springcouse.domain.RequestStage;
 import com.springcouse.domain.enuns.RequestState;
 import com.springcouse.repository.RequestRepository;
@@ -40,6 +39,11 @@ public class RequestStageService {
 	
 	public List<RequestStage> listAllByRequestId(Long requestId){
 		List<RequestStage> stages = requestStageRepository.findAllByRequestId(requestId);
+		return stages;
+	}
+	
+	public List<RequestStage> listAll() {
+		List<RequestStage> stages = requestStageRepository.findAll();
 		return stages;
 	}
 
