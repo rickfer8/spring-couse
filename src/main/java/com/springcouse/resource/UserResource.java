@@ -1,5 +1,7 @@
 package com.springcouse.resource;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springcouse.domain.Request;
 import com.springcouse.domain.User;
 import com.springcouse.dto.UserLoginDto;
+import com.springcouse.dto.UserSaveDto;
+import com.springcouse.dto.UserUpdateDto;
 import com.springcouse.dto.UserUpdateRoleDto;
 import com.springcouse.model.PageModel;
 import com.springcouse.model.PageRequestModel;
@@ -33,13 +37,15 @@ public class UserResource {
 	private RequestService requestService;
 	
 	@PostMapping
-	public ResponseEntity<User> save(@RequestBody User user){
+	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDto userDto){
+		User user = userDto.transformToUser();
 		User cretedUser = userService.save(user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(cretedUser);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> update(@PathVariable(name = "id") Long id, @RequestBody User user){
+	public ResponseEntity<User> update(@PathVariable(name = "id") Long id, @RequestBody @Valid UserUpdateDto userDto){
+		User user = userDto.transformToUser();
 		user.setId(id);
 		User updateUser = userService.update(user);
 		return ResponseEntity.ok(updateUser);
@@ -63,7 +69,7 @@ public class UserResource {
 	}	
 	
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody UserLoginDto user){
+	public ResponseEntity<User> login(@RequestBody @Valid UserLoginDto user){
 		User loggedUser = userService.login(user.getEmail(), user.getPassword());
 		return ResponseEntity.ok(loggedUser);
 	}
@@ -83,7 +89,7 @@ public class UserResource {
 	@PatchMapping("/role/{id}")
 	public ResponseEntity<?> updateRole(
 			@PathVariable(name = "id") Long id, 
-			@RequestBody UserUpdateRoleDto userDto) {
+			@RequestBody @Valid UserUpdateRoleDto userDto) {
 		User user = new User();
 		user.setId(id);
 		user.setRole(userDto.getRole());
